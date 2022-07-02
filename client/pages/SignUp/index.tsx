@@ -1,3 +1,4 @@
+import useInput from '@hooks/useInput';
 import React, { useCallback, useState } from 'react';
 import {
     Header,
@@ -10,27 +11,21 @@ import {
 } from './style';
 
 const SignUp = () => {
-    const [email, setEmail] = useState('');
-    const [nickname, setNickName] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordCheck, setPasswrodCheck] = useState('');
+    const [email, onChangeEmail, setEmail] = useInput('');
+    const [nickname, onChangeNickname, setNickName] = useInput('');
+    const [password, , setPassword] = useInput('');
+    const [passwordCheck, , setPasswordCheck] = useInput('');
     const [mismatchError, setMismatchError] = useState(false);
-    const onChangeEmail = useCallback(e => {
-        setEmail(e.target.value)
-    }, [])
-
-    const onChangeNickname = useCallback(e => {
-        setNickName(e.target.value)
-    }, [])
 
     const onChangePassword = useCallback(e => {
-        setPassword(e.target.value)
+        setPassword(e.target.value);
+        setMismatchError(password !== e.target.value);
     }, [])
 
     const onChangePasswordCheck = useCallback(e => {
-        setPasswrodCheck(e.target.value)
-        setMismatchError(e.target.value !== password);
-    }, [passwordCheck])
+        setPasswordCheck(e.target.value);
+        setMismatchError(passwordCheck !== e.target.value);
+    }, [password, setPasswordCheck])
 
     const onSubmit = useCallback(e => {
         e.preventDefault();
@@ -54,6 +49,7 @@ const SignUp = () => {
                             value={email}
                             onChange={onChangeEmail}
                         />
+                        {!email && <Error>이메일을 입력해주세요.</Error>}
                     </div>
                 </Label>
                 <Label id="nickname-label">
@@ -66,6 +62,7 @@ const SignUp = () => {
                             value={nickname}
                             onChange={onChangeNickname}
                         />
+                        {!nickname && <Error>닉네임을 입력해주세요.</Error>}
                     </div>
                 </Label>
                 <Label id="password-label">
@@ -92,7 +89,6 @@ const SignUp = () => {
                         />
                     </div>
                     {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
-                    {!nickname && <Error>닉네임을 입력해주세요.</Error>}
                     {/* {signUpError && <Error>이미 가입된 이메일입니다.</Error>} */}
                     {/* {signUpSuccess && <Success>회원가입되었습니다! 로그인해주세요.</Success>} */}
                 </Label>
