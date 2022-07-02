@@ -33,7 +33,7 @@
     "react-custom-scrollbars-2": "^4.3.0",
     "react-dom": "^17.0.1",
     "react-mentions": "^4.1.1",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "5.2.0",
     "react-toastify": "^8.0.2",
     "regexify-string": "^1.0.5",
     "socket.io-client": "^4.2.0",
