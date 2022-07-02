@@ -6,19 +6,39 @@ import {
     Label,
     Button,
     LinkContainer,
+    Error,
 } from './style';
 
 const SignUp = () => {
-    const [email] = useState('');
-    const [nickname] = useState('');
-    const [password] = useState('')
-    const [passwordCheck] = useState('')
+    const [email, setEmail] = useState('');
+    const [nickname, setNickName] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordCheck, setPasswrodCheck] = useState('');
+    const [mismatchError, setMismatchError] = useState(false);
+    const onChangeEmail = useCallback(e => {
+        setEmail(e.target.value)
+    }, [])
 
-    const onChangeEmail = useCallback(() => { }, [])
-    const onChangeNickname = useCallback(() => { }, [])
-    const onChangePassword = useCallback(() => { }, [])
-    const onChangePasswordCheck = useCallback(() => { }, [])
-    const onSubmit = useCallback(() => { }, [])
+    const onChangeNickname = useCallback(e => {
+        setNickName(e.target.value)
+    }, [])
+
+    const onChangePassword = useCallback(e => {
+        setPassword(e.target.value)
+    }, [])
+
+    const onChangePasswordCheck = useCallback(e => {
+        setPasswrodCheck(e.target.value)
+        setMismatchError(e.target.value !== password);
+    }, [passwordCheck])
+
+    const onSubmit = useCallback(e => {
+        e.preventDefault();
+        // 비밀번호 일치하는 지 체크
+        if (!mismatchError) {
+            console.log('서버로 회원가입하기')
+        }
+    }, [email, nickname, password, passwordCheck])
 
     return (
         <div id="container">
@@ -27,19 +47,37 @@ const SignUp = () => {
                 <Label id="email-label">
                     <span>이메일 주소</span>
                     <div>
-                        <Input type="email" id="email" name="email" value={email} onChange={onChangeEmail} />
+                        <Input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={email}
+                            onChange={onChangeEmail}
+                        />
                     </div>
                 </Label>
                 <Label id="nickname-label">
                     <span>닉네임</span>
                     <div>
-                        <Input type="text" id="nickname" name="nickname" value={nickname} onChange={onChangeNickname} />
+                        <Input
+                            type="text"
+                            id="nickname"
+                            name="nickname"
+                            value={nickname}
+                            onChange={onChangeNickname}
+                        />
                     </div>
                 </Label>
                 <Label id="password-label">
                     <span>비밀번호</span>
                     <div>
-                        <Input type="password" id="password" name="password" value={password} onChange={onChangePassword} />
+                        <Input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={password}
+                            onChange={onChangePassword}
+                        />
                     </div>
                 </Label>
                 <Label id="password-check-label">
@@ -53,6 +91,10 @@ const SignUp = () => {
                             onChange={onChangePasswordCheck}
                         />
                     </div>
+                    {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
+                    {!nickname && <Error>닉네임을 입력해주세요.</Error>}
+                    {/* {signUpError && <Error>이미 가입된 이메일입니다.</Error>} */}
+                    {/* {signUpSuccess && <Success>회원가입되었습니다! 로그인해주세요.</Success>} */}
                 </Label>
                 <Button type="submit">회원가입</Button>
             </Form>
