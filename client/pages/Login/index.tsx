@@ -15,7 +15,11 @@ import { Link } from 'react-router-dom';
 import fetcher from '@utils/fetcher';
 
 const LogIn = () => {
-  const { data, error } = useSWR('http://localhost:3095/api/users', fetcher);
+  const { data, error, mutate } = useSWR(
+    'http://localhost:3095/api/users',
+    fetcher,
+    { dedupingInterval: 10000 },
+  );
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [logInError, setLogInError] = useState(false);
@@ -30,7 +34,7 @@ const LogIn = () => {
           { email, password },
           { withCredentials: true },
         )
-        .then((res) => console.log(res.data))
+        .then((res) => mutate())
         .catch((error) => {
           setLogInError(error.response?.data?.code === 401);
         });
