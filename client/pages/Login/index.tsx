@@ -11,7 +11,7 @@ import {
 import axios from 'axios';
 import useSWR from 'swr';
 import React, { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import fetcher from '@utils/fetcher';
 
 const LogIn = () => {
@@ -41,6 +41,16 @@ const LogIn = () => {
     },
     [email, password],
   );
+
+  // 로딩중 처리
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
+
+  // 로그인이 된 상황
+  if (data) {
+    return <Redirect to="/workspace/channel" />;
+  }
 
   return (
     <div id="container">

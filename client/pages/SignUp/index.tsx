@@ -13,9 +13,17 @@ import {
 } from './style';
 
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 const SignUp = () => {
+  const { data, error, mutate } = useSWR(
+    'http://localhost:3095/api/users',
+    fetcher,
+    { dedupingInterval: 10000 },
+  );
+
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname, setNickName] = useInput('');
   const [password, , setPassword] = useInput('');
@@ -36,7 +44,6 @@ const SignUp = () => {
     },
     [password, setPasswordCheck],
   );
-
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -64,6 +71,16 @@ const SignUp = () => {
     },
     [email, nickname, password, passwordCheck],
   );
+
+  // 로딩중 처리
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
+
+  // 로그인이 된 상황
+  if (data) {
+    return <Redirect to="/workspace/channel" />;
+  }
 
   return (
     <div id="container">
