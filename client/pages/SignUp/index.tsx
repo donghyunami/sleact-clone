@@ -13,13 +13,13 @@ import {
 } from './style';
 
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const SignUp = () => {
-  const [email, onChangeEmail, setEmail] = useInput('');
+  const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname, setNickName] = useInput('');
   const [password, , setPassword] = useInput('');
   const [passwordCheck, , setPasswordCheck] = useInput('');
-
   const [mismatchError, setMismatchError] = useState(false);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
   const [signUpError, setSignUpError] = useState('');
@@ -128,7 +128,7 @@ const SignUp = () => {
       </Form>
       <LinkContainer>
         이미 회원이신가요?&nbsp;
-        <a href="/login">로그인 하러가기</a>
+        <Link to="/login">로그인 하러가기</Link>
       </LinkContainer>
     </div>
   );

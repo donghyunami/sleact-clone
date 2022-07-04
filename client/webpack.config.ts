@@ -50,7 +50,10 @@ const config: Configuration = {
           ],
           env: {
             development: {
-              plugins: [['@emotion/babel-plugin', { sourceMap: true }], require.resolve('react-refresh/babel')],
+              plugins: [
+                ['@emotion/babel-plugin', { sourceMap: true }],
+                require.resolve('react-refresh/babel'),
+              ],
             },
             production: {
               plugins: ['@emotion/babel-plugin'],
@@ -71,7 +74,9 @@ const config: Configuration = {
       //   files: "./src/**/*",
       // },
     }),
-    new webpack.EnvironmentPlugin({ NODE_ENV: isDevelopment ? 'development' : 'production' }),
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: isDevelopment ? 'development' : 'production',
+    }),
   ],
   output: {
     // yarn build 할 때의 처리
@@ -85,13 +90,13 @@ const config: Configuration = {
     port: 3090,
     devMiddleware: { publicPath: '/dist/' },
     static: { directory: path.resolve(__dirname) },
-    // proxy: {
-    //   '/api/': {
-    //     target: 'http://localhost:3095',
-    //     changeOrigin: true,
-    //     ws: true,
-    //   },
-    // },
+    proxy: {
+      '/api/': {
+        target: 'http://localhost:3095',
+        changeOrigin: true,
+        ws: true,
+      },
+    },
   },
 };
 
@@ -104,7 +109,9 @@ if (isDevelopment && config.plugins) {
       },
     }),
   );
-  config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: false }));
+  config.plugins.push(
+    new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: false }),
+  );
 }
 
 if (!isDevelopment && config.plugins) {
