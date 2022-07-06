@@ -34,7 +34,7 @@ const LogIn = () => {
           { email, password },
           { withCredentials: true },
         )
-        .then((res) => mutate())
+        .then((res) => mutate(res.data))
         .catch((error) => {
           setLogInError(error.response?.data?.code === 401);
         });

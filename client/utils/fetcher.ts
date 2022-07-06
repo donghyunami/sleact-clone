@@ -7,4 +7,12 @@ const fetcher = (url: string) =>
     })
     .then((res) => res.data);
 
+// swr이 post 요청이 가능하다
+// const fetcherPost = (url: string) =>
+//   axios
+//     .post(url, {
+//       withCredentials: true,
+//     })
+//     .then((res) => res.data);
+
 export default fetcher;
