@@ -4,8 +4,8 @@ import App from '@layouts/App';
 import { BrowserRouter } from 'react-router-dom';
 
 render(
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>
-    , document.querySelector('#app'),
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.querySelector('#app'),
 );

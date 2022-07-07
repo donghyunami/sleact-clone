@@ -1366,7 +1366,7 @@
   dependencies:
     "fork-ts-checker-webpack-plugin" "*"
 
-"@types/gravatar@^1.8.1":
+"@types/gravatar@^1.8.3":
   "integrity" "sha512-F4Ij02yEI2+hr7aMCrM8syaU9pN16cSJIxnFf/ccVNQ+HrKzgVz8Kn0ZJhWzCJM+UnELHO/OGKTW0O646vk/HA=="
   "resolved" "https://registry.npmjs.org/@types/gravatar/-/gravatar-1.8.3.tgz"
   "version" "1.8.3"
@@ -3289,7 +3289,7 @@
   "resolved" "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.10.tgz"
   "version" "4.2.10"
 
-"gravatar@^1.8.1":
+"gravatar@^1.8.2":
   "integrity" "sha512-GdRwLM3oYpFQKy47MKuluw9hZ2gaCtiKPbDGdcDEuYDKlc8eNnW27KYL9LVbIDzEsx88WtDWQm2ClBcsgBnj6w=="
   "resolved" "https://registry.npmjs.org/gravatar/-/gravatar-1.8.2.tgz"
   "version" "1.8.2"

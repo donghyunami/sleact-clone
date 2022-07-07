@@ -3,17 +3,24 @@ import axios from 'axios';
 import React, { FC, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 import useSWR from 'swr';
+import gravatar from 'gravatar';
+import {
+  Channels,
+  Chats,
+  Header,
+  MenuScroll,
+  ProfileImg,
+  RightMenu,
+  WorkspaceName,
+  Workspaces,
+  WorkspaceWrapper,
+} from './styles';
 
 const Workspace: FC = ({ children }) => {
   const { data, error, mutate } = useSWR(
     'http://localhost:3095/api/users',
     fetcher,
     { dedupingInterval: 10000 },
-    // 1분동안 첫번째 요청한 데이터를 캐싱(보관)해서
-    // 이것을 data를 그대로 가져옴
-    // 즉, 최초 한번 요청을 보낸 다음, 1분동안은
-    // 서버에 요청을 하지 않음
-    // (서비스에 따라 Interval을 설정해주면 된다.)
   );
 
   const onLogout = useCallback(() => {
@@ -33,7 +40,25 @@ const Workspace: FC = ({ children }) => {
   }
   return (
     <div>
+      <Header>
+        <RightMenu>
+          <span>
+            <ProfileImg
+              src={gravatar.url(data.email, { s: '28px', d: 'retro' })}
+              alt={data.nickname}
+            />
+          </span>
+        </RightMenu>
+      </Header>
       <button onClick={onLogout}>로그아웃</button>
+      <WorkspaceWrapper>
+        <Workspaces>test</Workspaces>
+        <Channels>
+          <WorkspaceName>Select</WorkspaceName>
+          <MenuScroll>MenuScroll</MenuScroll>
+        </Channels>
+        <Chats>Chats</Chats>
+      </WorkspaceWrapper>
       {children}
     </div>
   );
