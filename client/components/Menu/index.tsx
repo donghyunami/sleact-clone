@@ -1,10 +1,10 @@
-import React, { CSSProperties, FC, useCallback } from 'react';
+import React, { CSSProperties, FC, MouseEvent, useCallback } from 'react';
 import { CloseModalButton, CreateMenu } from './style';
 
 interface Props {
   style: CSSProperties;
   show: boolean;
-  onCloseModal: () => void;
+  onCloseModal: (e: MouseEvent) => void;
   closeButton?: boolean;
 }
 
@@ -15,9 +15,13 @@ const Menu: FC<Props> = ({
   onCloseModal,
   closeButton,
 }) => {
-  const stopPropagation = useCallback((e) => {
+  const stopPropagation = useCallback((e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   }, []);
+
+  if (!show) {
+    return null;
+  }
 
   return (
     <CreateMenu onClick={onCloseModal}>
