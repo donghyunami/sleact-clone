@@ -5,10 +5,10 @@ import useSWR from 'swr';
 
 const DirectMessage = () => {
   return (
-    <Workspace>
+    <div>
       <h1>DM 페이지</h1>
       <div>DirectMessage 보내기</div>
-    </Workspace>
+    </div>
   );
 };
 
