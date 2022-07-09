@@ -79,7 +79,7 @@ const SignUp = () => {
 
   // 로그인이 된 상황
   if (data) {
-    return <Redirect to="/workspace/channel" />;
+    return <Redirect to="/workspace/sleact/channel/일반" />;
   }
 
   return (
