@@ -7,7 +7,7 @@ import {
   Error,
   Button,
   LinkContainer,
-} from '@pages/SignUp/style';
+} from '@pages/SignUp/styles';
 import axios from 'axios';
 import useSWR from 'swr';
 import React, { useCallback, useState } from 'react';

@@ -1,6 +1,6 @@
 import Modal from '@components/Modal';
 import useInput from '@hooks/useInput';
-import { Button, Input, Label } from '@pages/SignUp/style';
+import { Button, Input, Label } from '@pages/SignUp/styles';
 import { IChannel, IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
@@ -53,6 +53,9 @@ const CreateChannelModal: VFC<Props> = ({
     (e) => {
       e.preventDefault();
       console.log('채널 생성하기');
+      if (!newChannel || !newChannel.trim()) {
+        return;
+      }
       axios
         .post(
           `http://localhost:3095/api/workspaces/${workspace}/channels`,
