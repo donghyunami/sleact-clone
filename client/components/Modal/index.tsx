@@ -1,5 +1,5 @@
 import React, { FC, MouseEvent, useCallback } from 'react';
-import { CloseModalButton } from '@components/Menu/style';
+import { CloseModalButton } from '@components/Menu/styles';
 import { CreateModal } from '@components/Modal/styles';
 
 interface Props {

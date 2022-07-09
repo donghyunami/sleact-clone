@@ -1,5 +1,5 @@
 import React, { CSSProperties, FC, MouseEvent, useCallback } from 'react';
-import { CloseModalButton, CreateMenu } from './style';
+import { CloseModalButton, CreateMenu } from './styles';
 
 interface Props {
   style: CSSProperties;

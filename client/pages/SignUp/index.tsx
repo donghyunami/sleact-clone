@@ -10,7 +10,7 @@ import {
   LinkContainer,
   Error,
   Success,
-} from './style';
+} from './styles';
 
 import axios from 'axios';
 import { Link, Redirect } from 'react-router-dom';
