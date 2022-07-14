@@ -34,9 +34,13 @@ const InviteWorkspaceModal: FC<Props> = ({
         return;
       }
       axios
-        .post(`/api/workspaces/${workspace}/members`, {
-          email: newMember,
-        })
+        .post(
+          `/api/workspaces/${workspace}/members`,
+          {
+            email: newMember,
+          },
+          { withCredentials: true },
+        )
         .then(({ data }) => {
           mutateMember(data, false);
           setShowInviteWorkspaceModal(false);
