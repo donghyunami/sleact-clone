@@ -3,12 +3,12 @@ import { CollapseButton } from '@components/DMList/styles';
 // import useSocket from '@hooks/useSocket';
 import { IUser, IUserWithOnline } from '@typings/db';
 import fetcher from '@utils/fetcher';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { VFC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import useSWR from 'swr';
 
-const DMList: FC = () => {
+const DMList: VFC = () => {
   const { workspace } = useParams<{ workspace?: string }>();
   const {
     data: userData,
