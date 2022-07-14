@@ -40,6 +40,8 @@ import InviteChannelModal from '@components/InviteChannelModal';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
+import ChannelList from '@components/ChannelList';
+import DMList from '@components/DMList';
 
 const Workspace: VFC = () => {
   const { workspace, channel } = useParams<{
@@ -51,14 +53,20 @@ const Workspace: VFC = () => {
     data: userData,
     error,
     mutate,
-  } = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher, {
+  } = useSWR<IUser | false>('/api/users', fetcher, {
     dedupingInterval: 10000,
   });
 
   const { data: channelData } = useSWR<IChannel[]>(
-    userData
-      ? `http://localhost:3095/api/workspaces/${workspace}/channels`
-      : null,
+    userData ? `/api/workspaces/${workspace}/channels` : null,
+    fetcher,
+    {
+      dedupingInterval: 10000,
+    },
+  );
+
+  const { data: memberData } = useSWR<IChannel[]>(
+    userData ? `/api/workspaces/${workspace}/members` : null,
     fetcher,
     {
       dedupingInterval: 10000,
@@ -82,7 +90,7 @@ const Workspace: VFC = () => {
 
   const onLogout = useCallback(() => {
     axios
-      .post('http://localhost:3095/api/users/logout', null, {
+      .post('/api/users/logout', null, {
         withCredentials: true,
       })
       .then(() => {
@@ -119,7 +127,7 @@ const Workspace: VFC = () => {
 
       axios
         .post(
-          'http://localhost:3095/api/workspaces',
+          '/api/workspaces',
           {
             workspace: newWorkspace,
             url: newUrl,
@@ -160,7 +168,9 @@ const Workspace: VFC = () => {
     setShowCreateChannelModal(true);
   }, []);
 
-  const onClickInviteWorkspace = useCallback(() => {}, []);
+  const onClickInviteWorkspace = useCallback(() => {
+    setShowInviteWorkspaceModal(true);
+  }, []);
 
   // 로딩중 처리
   if (userData === undefined) {
@@ -238,9 +248,13 @@ const Workspace: VFC = () => {
                   <button onClick={onLogout}>로그아웃</button>
                 </WorkspaceModal>
               </Menu>
+              <ChannelList userData={userData} />
+
               {channelData?.map((ch) => (
                 <div key={ch.id}>{ch.name}</div>
               ))}
+
+              <DMList />
             </MenuScroll>
           </Channels>
           <Chats>

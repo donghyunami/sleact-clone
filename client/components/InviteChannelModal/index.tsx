@@ -27,11 +27,12 @@ const InviteChannelModal: FC<Props> = ({
   const { data: userData } = useSWR<IUser>('/api/users', fetcher);
   const { mutate: revalidateMembers } = useSWR<IUser[]>(
     userData
-      ? `/api/workspaces/${workspace}/channels/${channel}/members`
-      : null,
+      ? `/api/workspaces/${workspace}/channels/일반/members`
+      : // `http://localhost:3095/api/workspaces/${workspace}/channels/${channel}/members`
+        null,
     fetcher,
   );
-
+  // /api/workspaces/test/channels/undefined/members
   const onInviteMember = useCallback(
     (e) => {
       e.preventDefault();
