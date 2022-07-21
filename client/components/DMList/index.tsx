@@ -85,7 +85,7 @@ const DMList: VFC = () => {
                   data-qa-presence-dnd="false"
                 />
                 <span>{member.nickname}</span>
-                {member.id === userData?.id && <span> (나)</span>}
+                {member.id === userData?.id && <span>(나)</span>}
               </NavLink>
             );
           })}
