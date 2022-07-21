@@ -67,7 +67,7 @@ const SignUp = () => {
           .finally(() => {}); // 실패하든 성공하든 상관없이 실행
       }
     },
-    [email, nickname, password, passwordCheck],
+    [email, nickname, password, mismatchError],
   );
 
   // 로딩중 처리
