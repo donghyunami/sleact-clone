@@ -1284,7 +1284,7 @@
   "resolved" "https://registry.npmjs.org/@tsconfig/node16/-/node16-1.0.3.tgz"
   "version" "1.0.3"
 
-"@types/autosize@^4.0.0":
+"@types/autosize@^4.0.1":
   "integrity" "sha512-iPJT/FCaSO79G6j+9n6gmFc5nhxZ1gDrA2UAvb5FslJ6FJQZnDfbBU0qp5vpp0Cbjj7+gOyjuWZ7RrXvRuETaA=="
   "resolved" "https://registry.npmjs.org/@types/autosize/-/autosize-4.0.1.tgz"
   "version" "4.0.1"

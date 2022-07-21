@@ -1,6 +1,6 @@
 import { IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
-import React, { useCallback, VFC } from 'react';
+import React, { useCallback, useEffect, useRef, VFC } from 'react';
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import {
@@ -11,11 +11,21 @@ import {
   Toolbox,
 } from './styles';
 
+import autosize from 'autosize';
+
 interface Props {
   chat: string;
+  onSubmitForm: (e: any) => void;
+  onChangeChat: (e: any) => void;
+  placeholder?: string;
 }
 
-const ChatBox: VFC<Props> = ({ chat }) => {
+const ChatBox: VFC<Props> = ({
+  chat,
+  onSubmitForm,
+  onChangeChat,
+  placeholder,
+}) => {
   const { workspace } = useParams<{ workspace: string }>();
   const {
     data: userData,
@@ -29,14 +39,34 @@ const ChatBox: VFC<Props> = ({ chat }) => {
     fetcher,
   );
 
-  const onSubmitForm = useCallback(() => {}, []);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  useEffect(() => {
+    if (textareaRef.current) {
+      autosize(textareaRef.current);
+    }
+  }, []);
+
+  const onKeydownChat = useCallback((e) => {
+    console.log(e);
+    if (e.key === 'Enter') {
+      if (!e.shiftKey) {
+        console.log({ shiftKey: false });
+        onSubmitForm(e);
+      }
+    }
+  }, []);
   return (
     <ChatArea>
       <Form onSubmit={onSubmitForm}>
-        <MentionsTextarea>
-          <textarea />
-        </MentionsTextarea>
+        <MentionsTextarea
+          id="edior-chat"
+          value={chat}
+          onChange={onChangeChat}
+          onKeyDown={onKeydownChat}
+          placeholder={placeholder}
+          ref={textareaRef}
+        ></MentionsTextarea>
         <Toolbox>
           <SendButton
             className={
