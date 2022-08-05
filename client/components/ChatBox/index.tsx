@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import {
   ChatArea,
+  EachMention,
   Form,
   MentionsTextarea,
   SendButton,
@@ -12,6 +13,8 @@ import {
 } from './styles';
 
 import autosize from 'autosize';
+import gravatar from 'gravatar';
+import { Mention, SuggestionDataItem } from 'react-mentions';
 
 interface Props {
   chat: string;
@@ -59,17 +62,52 @@ const ChatBox: VFC<Props> = ({
     },
     [onSubmitForm],
   );
+
+  const renderSuggestion = useCallback(
+    (
+      suggestion: SuggestionDataItem,
+      search: string,
+      highlightedDisplay: React.ReactNode,
+      index: number,
+      focuse: boolean,
+    ): React.ReactNode => {
+      if (!memberData) return;
+      return (
+        <EachMention focus={focuse}>
+          <img
+            src={gravatar.url(memberData[index].email, {
+              s: '20px',
+              d: 'retro',
+            })}
+            alt={memberData[index].nickname}
+          />
+          <span>{highlightedDisplay}</span>
+        </EachMention>
+      );
+    },
+    [],
+  );
   return (
     <ChatArea>
       <Form onSubmit={onSubmitForm}>
         <MentionsTextarea
-          id="edior-chat"
+          id="editor-chat"
           value={chat}
           onChange={onChangeChat}
           onKeyDown={onKeydownChat}
           placeholder={placeholder}
-          ref={textareaRef}
-        ></MentionsTextarea>
+          inputRef={textareaRef}
+          allowSuggestionsAboveCursor
+        >
+          <Mention
+            appendSpaceOnAdd
+            trigger="@"
+            data={
+              memberData?.map((v) => ({ id: v.id, display: v.nickname })) || []
+            }
+            renderSuggestion={renderSuggestion}
+          />
+        </MentionsTextarea>
         <Toolbox>
           <SendButton
             className={
