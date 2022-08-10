@@ -1,12 +1,10 @@
-// import useSocket from '@hooks/useSocket';
-import { CollapseButton } from '@components/DMList/styles';
-import useSocket from '@hooks/useSocket';
-// import useSocket from '@hooks/useSocket';
-import { IUser, IUserWithOnline } from '@typings/db';
-import fetcher from '@utils/fetcher';
 import React, { VFC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { CollapseButton } from '@components/DMList/styles';
+import useSocket from '@hooks/useSocket';
+import fetcher from '@utils/fetcher';
+import { IUser, IUserWithOnline } from '@typings/db';
 import useSWR from 'swr';
 
 const DMList: VFC = () => {
