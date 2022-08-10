@@ -1,6 +1,6 @@
 import { Container, Header } from '@pages/DirectMessage/styles';
 import fetcher from '@utils/fetcher';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import gravatar from 'gravatar';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
@@ -14,7 +14,7 @@ const DirectMessage = () => {
   const { workspace, id } = useParams<{ workspace: string; id: string }>();
 
   // (워크스페이스에 초대된)유저 정보
-  const { data: userData } = useSWR(
+  const { data: userData, error } = useSWR(
     `/api/workspaces/${workspace}/users/${id}`,
     fetcher,
   );
@@ -27,8 +27,6 @@ const DirectMessage = () => {
     `/api/workspaces/${workspace}/dms/${id}/chats?perPage=20&page=1`,
     fetcher,
   );
-
-  console.log('chatData_', chatData);
 
   const onSubmitForm = useCallback(
     (e) => {
@@ -51,10 +49,13 @@ const DirectMessage = () => {
     [chat, workspace, id, mutateChat, setChat],
   );
 
-  if (userData) {
-    console.log('userData', userData);
+  if (error) {
+    return <div>{error?.response.data}</div>;
   }
-  console.log();
+
+  if (chatData === undefined) {
+    return <div>DM 메시지 불러오는중 ...</div>;
+  }
   if (!userData || !myData) {
     return null;
   }

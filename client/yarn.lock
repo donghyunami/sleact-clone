@@ -4971,10 +4971,10 @@
   dependencies:
     "@babel/runtime" "^7.8.4"
 
-"regexify-string@^1.0.5":
-  "integrity" "sha512-mmD0AUNaY/piGW2AyACWdQOjIAwNuWz+KIvxfBZPDdCBAexiROeQxdxTaYAWcIxwtUAOwojdTta6CMMil84jXw=="
-  "resolved" "https://registry.npmjs.org/regexify-string/-/regexify-string-1.0.17.tgz"
-  "version" "1.0.17"
+"regexify-string@^1.0.19":
+  "integrity" "sha512-EREOggl31J6v2Hk3ksPuOof0DMq5QhFfVQ7iDaGQ6BeA1QcrV4rhGvwCES5a72ITMmLBDAOb6cOWbn8/Ja82Ig=="
+  "resolved" "https://registry.npmjs.org/regexify-string/-/regexify-string-1.0.19.tgz"
+  "version" "1.0.19"
 
 "regexp.prototype.flags@^1.4.1", "regexp.prototype.flags@^1.4.3":
   "integrity" "sha512-fjggEOO3slI6Wvgjwflkc4NFRCTZAu5CnNfBd5qOMYhWdn67nJBBu34/TkD++eeFmd8C9r9jfXJ27+nSiRkSUA=="
