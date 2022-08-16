@@ -12,7 +12,7 @@ export default function makeSection(chatList: IDM[]) {
     }
     sections[monthDate];
   });
-  console.log('sections', sections);
+  // console.log('sections', sections);
   return sections;
 }
 
