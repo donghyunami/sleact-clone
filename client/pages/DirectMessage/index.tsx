@@ -1,16 +1,17 @@
 import { Container, Header } from '@pages/DirectMessage/styles';
 import fetcher from '@utils/fetcher';
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import gravatar from 'gravatar';
 import { useParams } from 'react-router';
-import useSWR from 'swr';
 import ChatList from '@components/ChatList';
 import ChatBox from '@components/ChatBox';
 import useInput from '@hooks/useInput';
 import axios from 'axios';
 import { IDM } from '@typings/db';
 import makeSection from '@utils/makeSection';
-import { reverse } from 'dns';
+import Scrollbars from 'react-custom-scrollbars-2';
+import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 
 const DirectMessage = () => {
   const { workspace, id } = useParams<{ workspace: string; id: string }>();
@@ -25,10 +26,24 @@ const DirectMessage = () => {
   const { data: myData } = useSWR(`/api/users`, fetcher);
   const [chat, onChangeChat, setChat] = useInput('');
 
-  const { data: chatData, mutate: mutateChat } = useSWR<IDM[]>(
-    `/api/workspaces/${workspace}/dms/${id}/chats?perPage=20&page=1`,
+  const {
+    data: chatData,
+    mutate: mutateChat,
+    setSize,
+  } = useSWRInfinite<IDM[]>(
+    (index) =>
+      `/api/workspaces/${workspace}/dms/${id}/chats?perPage=20&page=${
+        index + 1
+      }`,
     fetcher,
   );
+
+  const scrollbarRef = useRef<Scrollbars>(null);
+  const isEmpty = chatData?.[0]?.length === 0;
+  const isReachingEnd =
+    isEmpty ||
+    (chatData && chatData[chatData.length - 1]?.length < 20) ||
+    false;
 
   const onSubmitForm = useCallback(
     (e) => {
@@ -62,7 +77,7 @@ const DirectMessage = () => {
     return null;
   }
 
-  const chatSections = makeSection(chatData ? [...chatData].reverse() : []);
+  const chatSections = makeSection(chatData ? chatData.flat().reverse() : []);
 
   return (
     <Container>
@@ -73,7 +88,13 @@ const DirectMessage = () => {
         />
         <span>{userData.nickname}</span>
       </Header>
-      <ChatList chatSections={chatSections} />
+      <ChatList
+        chatSections={chatSections}
+        ref={scrollbarRef}
+        setSize={setSize}
+        isEmpty={isEmpty}
+        isReachingEnd={isReachingEnd}
+      />
       <ChatBox
         chat={chat}
         onChangeChat={onChangeChat}
