@@ -1,6 +1,6 @@
 import { Container, Header } from '@pages/DirectMessage/styles';
 import fetcher from '@utils/fetcher';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import gravatar from 'gravatar';
 import { useParams } from 'react-router';
 import ChatList from '@components/ChatList';
@@ -50,21 +50,45 @@ const DirectMessage = () => {
       e.preventDefault();
       console.log('submit');
       console.log('chat', chat);
-      if (chat?.trim()) {
-        console.log('메시지 전송');
+      if (chat?.trim() && chatData) {
+        // console.log('메시지 전송');
+        const savedChat = chat;
+        mutateChat((prevChatData) => {
+          // optimistic ui를 위해  mutate(ChatData) 변경
+          prevChatData?.[0].unshift({
+            id: (chatData[0][0]?.id || 0) + 1,
+            content: savedChat,
+            SenderId: myData.id,
+            Sender: myData,
+            ReceiverId: userData.id,
+            Receiver: userData,
+            createdAt: new Date(),
+          });
+          return prevChatData;
+        }, false).then(() => {
+          setChat('');
+          // 채팅시 스크롤바 제일 아래로
+          scrollbarRef.current?.scrollToBottom();
+        });
         axios
           .post(`/api/workspaces/${workspace}/dms/${id}/chats`, {
             content: chat,
           })
           .then(() => {
-            mutateChat(); // 채팅을 등록하고 받아옴
-            setChat(''); //채팅창 초기화
+            mutateChat(); // 서버측에 채팅을 등록하고 받아옴
           })
           .catch(console.error);
       }
     },
-    [chat, workspace, id, mutateChat, setChat],
+    [chat, chatData, myData, userData, workspace, id],
   );
+
+  // 로딩시 스크롤바 제일 아래로
+  useEffect(() => {
+    if (chatData?.length === 1) {
+      scrollbarRef.current?.scrollToBottom();
+    }
+  }, [chatData]);
 
   if (error) {
     return <div>{error?.response.data}</div>;
@@ -73,6 +97,7 @@ const DirectMessage = () => {
   if (chatData === undefined) {
     return <div>DM 메시지 불러오는중 ...</div>;
   }
+
   if (!userData || !myData) {
     return null;
   }
@@ -90,9 +115,8 @@ const DirectMessage = () => {
       </Header>
       <ChatList
         chatSections={chatSections}
-        ref={scrollbarRef}
+        scrollRef={scrollbarRef}
         setSize={setSize}
-        isEmpty={isEmpty}
         isReachingEnd={isReachingEnd}
       />
       <ChatBox
