@@ -52,10 +52,9 @@ const ChatBox: VFC<Props> = ({
 
   const onKeydownChat = useCallback(
     (e) => {
-      console.log(e);
       if (e.key === 'Enter') {
         if (!e.shiftKey) {
-          console.log({ shiftKey: false });
+          // console.log({ shiftKey: false });
           onSubmitForm(e);
         }
       }
