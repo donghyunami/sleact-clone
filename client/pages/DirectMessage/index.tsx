@@ -12,6 +12,8 @@ import makeSection from '@utils/makeSection';
 import Scrollbars from 'react-custom-scrollbars-2';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
+import useSocket from '@hooks/useSocket';
+import { toast } from 'react-toastify';
 
 const DirectMessage = () => {
   const { workspace, id } = useParams<{ workspace: string; id: string }>();
@@ -38,6 +40,7 @@ const DirectMessage = () => {
     fetcher,
   );
 
+  const [socket] = useSocket(workspace); // 소켓 연결하기
   const scrollbarRef = useRef<Scrollbars>(null);
   const isEmpty = chatData?.[0]?.length === 0;
   const isReachingEnd =
@@ -82,6 +85,36 @@ const DirectMessage = () => {
     },
     [chat, chatData, myData, userData, workspace, id],
   );
+
+  const onMessage = useCallback((data: IDM) => {
+    if (data.SenderId === Number(id) && myData.id !== Number(id)) {
+      mutateChat((chatData) => {
+        chatData?.[0].unshift(data);
+        return chatData;
+      }, false).then(() => {
+        if (scrollbarRef.current) {
+          if (
+            scrollbarRef.current.getScrollHeight() <
+            scrollbarRef.current.getClientHeight() +
+              scrollbarRef.current.getScrollTop() +
+              150
+          ) {
+            console.log('scrollToBottom!', scrollbarRef.current?.getValues());
+            setTimeout(() => {
+              scrollbarRef.current?.scrollToBottom();
+            }, 100);
+          }
+        }
+      });
+    }
+  }, []);
+  // DM 채팅하기
+  useEffect(() => {
+    socket?.on('dm', onMessage);
+    return () => {
+      socket?.off('em', onMessage);
+    };
+  }, [socket, onMessage]);
 
   // 로딩시 스크롤바 제일 아래로
   useEffect(() => {
