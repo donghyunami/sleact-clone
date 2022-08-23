@@ -148,7 +148,7 @@ const DirectMessage = () => {
       </Header>
       <ChatList
         chatSections={chatSections}
-        scrollRef={scrollbarRef}
+        scrollbarRef={scrollbarRef}
         setSize={setSize}
         isReachingEnd={isReachingEnd}
       />

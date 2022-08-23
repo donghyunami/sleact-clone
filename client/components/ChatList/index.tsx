@@ -1,20 +1,22 @@
 import Chat from '@components/Chat';
-import { IDM } from '@typings/db';
+import { IChat, IDM } from '@typings/db';
 import React, { RefObject, useCallback, VFC } from 'react';
-import Scrollbars from 'react-custom-scrollbars-2';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import { ChatZone, Section, StickyHeader } from './styles';
 
 interface Props {
-  chatSections: { [key: string]: IDM[] };
-  setSize: (f: (size: number) => number) => Promise<IDM[][] | undefined>;
+  chatSections: { [key: string]: (IDM | IChat)[] };
+  setSize: (
+    f: (size: number) => number,
+  ) => Promise<(IDM | IChat)[][] | undefined>;
   isReachingEnd: boolean;
-  scrollRef: RefObject<Scrollbars>;
+  scrollbarRef: RefObject<Scrollbars>;
 }
 
 const CharList: VFC<Props> = ({
   chatSections,
   setSize,
-  scrollRef,
+  scrollbarRef,
   isReachingEnd,
 }) => {
   const onScroll = useCallback(
@@ -26,10 +28,10 @@ const CharList: VFC<Props> = ({
         setSize((prevSize) => prevSize + 1).then(() => {
           // 페이지수 변경 (페이지를 하나 더 불러오기)
           // 스크롤 위치 유지
-          if (scrollRef?.current) {
+          if (scrollbarRef?.current) {
           }
-          scrollRef.current?.scrollTop(
-            scrollRef.current?.getScrollHeight() - values.scrollHeight,
+          scrollbarRef.current?.scrollTop(
+            scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
           );
         });
       }
@@ -42,7 +44,7 @@ const CharList: VFC<Props> = ({
       <Scrollbars
         className="scrollbars"
         autoHide
-        ref={scrollRef}
+        ref={scrollbarRef}
         onScrollFrame={onScroll}
       >
         {Object.entries(chatSections).map(([date, chats]) => {
