@@ -7,9 +7,9 @@ import {
 } from 'react';
 
 type Handler = (e: ChangeEvent<HTMLInputElement>) => void;
-type ReturnTypes<T = any> = [T, Handler, Dispatch<SetStateAction<T>>];
+type ReturnTypes<T> = [T, Handler, Dispatch<SetStateAction<T>>];
 
-const useInput = <T = any>(initialValue: T): ReturnTypes<T> => {
+const useInput = <T>(initialValue: T): ReturnTypes<T> => {
   const [value, setValue] = useState(initialValue);
   const handler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value as unknown as T);
