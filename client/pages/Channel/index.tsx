@@ -9,16 +9,12 @@ import fetcher from '@utils/fetcher';
 import makeSection from '@utils/makeSection';
 import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState, VFC } from 'react';
-import Scrollbars from 'react-custom-scrollbars';
+import Scrollbars from 'react-custom-scrollbars-2';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
 
-interface Props {
-  setShowInviteChannelModal: (value: boolean) => void;
-  showInviteChannelModal: boolean;
-}
-const Channel: VFC<Props> = ({ setShowInviteChannelModal }) => {
+const Channel = () => {
   const { workspace, channel } = useParams<{
     workspace: string;
     channel: string;
@@ -35,7 +31,7 @@ const Channel: VFC<Props> = ({ setShowInviteChannelModal }) => {
     setSize,
   } = useSWRInfinite<IChat[]>(
     (index: number) =>
-      `/api/workspaces/${workspace}/dms/${channel}/chats?perPage=20&page=${
+      `/api/workspaces/${workspace}/channels/${channel}/chats?perPage=20&page=${
         index + 1
       }`,
     fetcher,
@@ -46,6 +42,7 @@ const Channel: VFC<Props> = ({ setShowInviteChannelModal }) => {
     fetcher,
   );
 
+  const [showInviteChannelModal, setShowInviteChannelModal] = useState(false);
   const [chat, onChangeChat, setChat] = useInput('');
   const [socket] = useSocket(workspace); // 소켓 연결하기
   const scrollbarRef = useRef<Scrollbars>(null);
@@ -154,8 +151,8 @@ const Channel: VFC<Props> = ({ setShowInviteChannelModal }) => {
     <Container>
       <Header>
         <span>#{channel}</span>
-        <div>
-          <span className="header-right">{channelMembersData?.length}</span>
+        <div className="header-right">
+          <span>{channelMembersData?.length}</span>
           <button
             onClick={onClickInviteChannel}
             className="c-button-unstyled p-ia__view_header__button"
@@ -172,7 +169,7 @@ const Channel: VFC<Props> = ({ setShowInviteChannelModal }) => {
       </Header>
       <ChatList
         chatSections={chatSections}
-        scrollRef={scrollbarRef}
+        scrollbarRef={scrollbarRef}
         setSize={setSize}
         isReachingEnd={isReachingEnd}
       />
