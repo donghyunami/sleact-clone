@@ -5,10 +5,15 @@ import { IChat, IDM, IUser } from '@typings/db';
 import dayjs from 'dayjs';
 import regexifyString from 'regexify-string';
 import { Link, useParams } from 'react-router-dom';
+
 interface Props {
   data: IDM | IChat;
 }
 
+const BACK_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3095'
+    : 'https://sleact.nodebird.com';
 const Chat: VFC<Props> = ({ data }) => {
   const { workspace } = useParams<{ workspace: string; channel: string }>();
   const user = 'Sender' in data ? data.Sender : data.User;
@@ -17,27 +22,32 @@ const Chat: VFC<Props> = ({ data }) => {
   // 형태: @[닉네임](dmId)
   const result = useMemo(
     () =>
-      regexifyString({
-        input: data.content,
-        pattern: /@\[(.+?)\]\((\d+?)\)|\n/g,
-        decorator(match, index) {
-          const arr: string[] | null = match.match(/@\[(.+?)]\((\d+?)\)/)!;
-          console.log('arr', arr);
-          if (arr) {
-            // 닉네임(arr[1]), dmId(arr[2]) 탐색
-            return (
-              <Link
-                key={match + index}
-                to={`/workspace/${workspace}/dm/${arr[2]}`}
-              >
-                @{arr[1]}
-              </Link>
-            );
-          }
-          // 줄바꿈 적용
-          return <br key={index} />;
-        },
-      }),
+      // uploads\\서버주소
+      data.content.startsWith('uploads\\') ? (
+        <img src={`${BACK_URL}/${data.content}`} style={{ maxHeight: 200 }} />
+      ) : (
+        regexifyString({
+          input: data.content,
+          pattern: /@\[(.+?)\]\((\d+?)\)|\n/g,
+          decorator(match, index) {
+            const arr: string[] | null = match.match(/@\[(.+?)]\((\d+?)\)/)!;
+            console.log('arr', arr);
+            if (arr) {
+              // 닉네임(arr[1]), dmId(arr[2]) 탐색
+              return (
+                <Link
+                  key={match + index}
+                  to={`/workspace/${workspace}/dm/${arr[2]}`}
+                >
+                  @{arr[1]}
+                </Link>
+              );
+            }
+            // 줄바꿈 적용
+            return <br key={index} />;
+          },
+        })
+      ),
     [data.content],
   );
 
