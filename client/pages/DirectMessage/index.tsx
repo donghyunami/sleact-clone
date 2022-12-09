@@ -194,10 +194,6 @@ const DirectMessage = () => {
     return <div>DM 메시지 불러오는중 ...</div>;
   }
 
-  if (!userData || !myData) {
-    return null;
-  }
-
   const chatSections = makeSection(
     chatData ? ([] as IDM[]).concat(...chatData).reverse() : [],
   );
